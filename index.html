@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Angel Candelaria - Portfolio</title>
+  
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      line-height: 1.5;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .diseno-clasico {
+      background-color: #f9f9f9;
+      border-left: 6px solid #8b9096;
+      margin: 0;
+      padding: 1em 2em;
+      position: relative;
+    }
+    .diseno-clasico p {
+      font-family: 'Times New Roman', Times, serif;
+      font-style: italic;
+      color: #333;
+      margin-top: 0;
+    }
+    .diseno-clasico cite {
+      display: block;
+      text-align: right;
+    }
+    
+    /* Contenedor de la foto de perfil y la cita */
+    .perfil-contenedor {
+      display: flex; 
+      gap: 2rem; 
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .perfil-contenedor img {
+      border-radius: 4px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    /* Clases para organizar los toggles */
+    details {
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    details details {
+      margin-left: 20px;
+      margin-top: 5px;
+      border-left: 2px solid #ddd;
+      padding-left: 15px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      padding: 5px;
+    }
+    summary:hover {
+      background-color: #f0f0f0;
+    }
+    
+   /* Sección de evidencia (Imágenes y Videos) */
+    .galeria-evidencia {
+      column-count: 3; 
+      column-gap: 15px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    .galeria-evidencia img, .galeria-evidencia video {
+      width: 100%;
+      height: auto;
+      margin-bottom: 15px;
+      display: block;
+      break-inside: avoid; 
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+      .galeria-evidencia {
+        column-count: 2;
+      }
+    }
+    @media (max-width: 480px) {
+      .galeria-evidencia {
+        column-count: 1;
+      }
+    }
+
+    /* Estilo específico para las cartas de recomendación */
+    .recomendacion-bloque {
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .cita-extracto {
+      font-family: 'Times New Roman', Times, serif;
+      font-style: italic;
+      color: #444;
+      font-size: 1.1em;
+      border-left: 3px solid #8b9096;
+      padding-left: 15px;
+      margin-bottom: 10px;
+    }
+    .autor-recomendacion {
+      text-align: right;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 5px;
+    }
+    .puesto-autor {
+      text-align: right;
+      font-size: 0.9em;
+      color: #666;
+    }
+    .btn-descarga {
+      display: inline-block;
+      margin-top: 10px;
+      color: #0056b3;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .btn-descarga:hover {
+      text-decoration: underline;
+    }
+
+    /* Galería Masonry para Certificados */
+    .galeria-certificados {
+      column-count: 3;
+      column-gap: 15px;
+    }
+    .galeria-certificados img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 15px;
+      break-inside: avoid;
+      border: 1px solid #ddd;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .galeria-certificados img:hover {
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 600px) {
+      .galeria-certificados { column-count: 1; }
+    }
+
+    /* --- Estilos del Visor de Imágenes (Modal) --- */
+    .modal-visor {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .modal-visor.activo {
+      display: flex;
+    }
+
+    .modal-visor img {
+      max-width: 90%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .cerrar-visor {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+ 
+  <h1>Angel Candelaria's Portfolio</h1>
+  <hr>
+    
+  <h3>Application to Technical Studentship for Mechanical Engineering at CERN</h3>
+
+  <div class="perfil-contenedor">
+    <img src="CV_photo.png" alt="Profesional_Photo" width="200">
+    <div style="flex: 1; min-width: 300px;">
+      <blockquote class="diseno-clasico">
+        <p>Hello CERN! Greetings from Monterrey, N.L. México. My name is Ángel and I'm glad you decided to take a look at my application.
+           To make this brief, I'm going to tell you some things about me. I'm a Mechanical Engineering student at Universidad de Monterrey 
+           (UDEM), currently on my way to my 7th semester. I'm mostly interested in multiple topics of engineering, from data science, physics, 
+           applied math, AI development, electronics, materials, CAD design, and manufacturing processes. I'm currently covering my studies at this 
+           private university on a 100% scholarship awarded for outstanding academic performance. I'm fascinated by the learning process of how things
+            work, and how we can make them better. Ultimately, here are some projects that I considered relevant for this application. Thank you so much!</p>
+        <cite>— Angel Candelaria</cite>
+      </blockquote>
+    </div>
+  </div>
+
+  <div>
+    <h2>Juan Ángel Candelaria Rodríguez</h2>
+    <h3>Mechanical Engineering Student | IMA - Universidad de Monterrey (UDEM)</h3>
+    <h4>Born: October 25th of 2005</h4>
+    <h4>E-mail: juan.candelaria@udem.edu</h4>
+    <h4>Tel: +52 (81) 29 53 91 38</h4>
+    <h4>Location: San Pedro Garza García, Nuevo León, México </h4>
+    <h4>Nationality: Mexican</h4>
+    <p>
+      <a href="https://www.linkedin.com/in/luan-angel-candelaria-rodriguez-888777361/" target="_blank">LinkedIn</a>
+      <a href="https://github.com/acandelariaa" target="_blank">GitHub</a>
+    </p>
+  </div>
+
+  <hr>
+  <h1>CV Content (Interactive)</h1>
+
+  <details>
+    <summary style="font-size: 1.3em; color: #222;">Education</summary>
+    
+    <details>
+      <summary>B. Eng. in Mechanical and Administrative Engineering (IMA) - UDEM </summary>
+      <p><b>Period:</b> 2023-Present</p>
+      <p><b>Status:</b> Currently completing 6th semester (3 years), GPA approx. 90-92/100.</p>
+
+      <a href="GPA_courses.pdf" target="_blank">📄 GPA and Courses See document (PDF)</a>
+
+      <ul>
+        <li>Full 100% merit scholarship awarded for outstanding academic performance during high school.</li>
+        <li><b>Relevant coursework:</b> Mechanics of Materials, Thermodynamics, Electronics CAD/CAM, FEA Analysis, Manufacturing Processes, Engineering Data Analysis and Machine Learning.</li>
+      </ul>
+      <h3></h3>
+      <h4>Related Photos</h4>
+      <div class="galeria-evidencia">
+        <img src="UDEM_campus.jpg" alt="UDEM Campus / Academic Evidence">
+        <img src="IMG_1085.jpg" alt="UDEM Campus / Academic Evidence">
+        <img src="IMG_1216.jpg" alt="UDEM Campus / Academic Evidence">
+        <img src="IMG_2288.jpg" alt="UDEM Campus / Academic Evidence">
+        <img src="IMG_5604.jpg" alt="UDEM Campus / Academic Evidence">
+        <img src="IMG_7557.jpg" alt="UDEM Campus / Academic Evidence">
+        <img src="campus_life.jpg" alt="UDEM Campus / Academic Evidence">
+      </div>
+    </details>
+
+    <details>
+      <summary>International Summer Programme - Universidad Complutense de Madrid</summary>
+      <p><b>Period:</b> Jul 2026 (upcoming)
+    </p>
+      <ul>
+        <li>Summer programme on Spain, with Administration and Project management strategies</li>
+        <li>Selected by UDEM due to distinguished academic performance during college.</li>
+        <li>Awarded a full scholarship covering all travel and programme expenses.</li>
+      </ul>
+      <h4>Media</h4>
+      <div class="galeria-evidencia">
+        <a href="Aceptacion_verano_complutense.pdf" target="_blank">📄 Summer Program (PDF)</a>
+        <br>
+        <a href="aceptación_fundación_complutense.pdf" target="_blank">📄 Financial Aid (PDF)</a>
+      </div>
+    </details>
+
+    <details>
+      <summary>High School + Technician Degree on Industrial Machinery and Tools</summary>
+      <p><b>Institution:</b> Preparatoria Politécnica Santa Catarina Fama Nuevo León, Mexico</p>
+      <p><b>Period:</b> 2020-2023</p>
+      <ul>
+        <li>Graduated as valedictorian highest GPA of the entire technical specialty cohort (2023).</li> 
+                <a href="valedictorian_certificate.pdf" target="_blank">📄 Valedictorian Certificate (PDF)</a>
+                <br>
+                <li>
+                    Apparition on official website - UDEM Prepa Politecnica graduation 2023
+                </li>
+                <a href="https://www.udem.edu.mx/es/institucional/noticia/exhortan-graduados-de-preparatoria-politecnica-santa-catarina-servir-la" target="_blank">UDEM / HighShcool - Prom 2023</a>
+
+        <li>Full 100% private benefactor scholarship (Martinez Sada Foundation) throughout the entire programme (2020-2023).</li>
+      </ul>
+      <h4>Related Photos</h4>
+      <div class="galeria-evidencia">
+        <img src="Valedictorian_highschool.jpg" alt="Valedictorian Recognition">
+        <img src="high_school_technician.jpg" alt="Valedictorian Recognition">
+        <img src="valedictorian_photo_certificate.jpg" alt="Valedictorian Recognition">
+        <img src="valedictorian_photos.jpg" alt="Valedictorian Recognition">
+        <video controls src="valedictorian_prom.mp4">prom video</video>
+      </div>
+    </details>
+  </details>
+
+  <details>
+    <summary style="font-size: 1.3em; color: #222;">Research & Technical Projects</summary>
+
+    <details>
+      <summary>Undergraduate Research Assistant - Cerebral Palsy Risk Prediction</summary>
+      <p><b>Institution:</b> UDEM / Instituto Nuevo Amanecer</p>
+      <p><b>Period:</b> 2025-Present</p>
+      <ul>
+        <li>Developing a Machine Learning model in Python to predict dropout risk factors for patients at a cerebral palsy rehabilitation institute.</li>
+        <li>Realized a statistical analysis to find desertion causes and risk factors</li>
+        <li>Performing data cleaning, feature engineering, and model evaluation using scikit-learn and Google Colab.</li>
+         <a href="Research_participation_certificate.pdf" target="_blank">📄 AI Research Certificate (PDF)</a>
+      </ul>
+      <h4>Related Images</h4>
+      <div class="galeria-evidencia">
+        <img src="desertion_probability.png" alt="Research Academic Evidence">
+        <img src="model_performance.png" alt="Research Academic Evidence">
+        <img src="feature_importance.png" alt="Research Academic Evidence">
+        <img src="desertion_over_time.png" alt="Research Academic Evidence">
+      </div>
+    </details>
+
+    <details>
+      <summary>NASA Space Apps Challenge 2025</summary>
+      <p><b>Period:</b> Oct 2025 </p>
+      <ul>
+        <li>Global Hackathon 2025 Global Nominee team </li>
+        <li>Tackled the challenge of identifying shark migration trajectories from space using geographic, atmospheric, and oceanographic datasets.</li>
+        <li>Integrated multi-source spatial data and built a predictive model to map movement patterns.</li>
+        <li>Developing a model using unsupervised learning and montecarlo simulations</li>
+        <a href="https://github.com/Isaac24-Y/Sharkmageddon" target="_blank">See Documentation (Github) Repository</a>
+        <br>
+        <a href="global_nominee_NASA_space_apps_2025.pdf" target="_blank">📄 Global Nominee (PDF)</a>
+        <br>
+        <a href="NASA_SPACE_APPS_Registration.pdf" target="_blank">📄 Team Registration (PDF)</a>
+
+      </ul>
+      <h4>Related Images</h4>
+      <div class="galeria-evidencia">
+        <img controls src="montecarlo_plots.png" alt="plots">
+        <img controls src="shark_probability_presence.png" alt="plots">
+
+        <video controls>
+          <source src="sharkmagedon.mp4" type="video/mp4">
+        </video>
+      </div>
+    </details>
+
+    <details>
+      <summary>Exoplanet Equilibrium Temperature Predictor</summary>
+      <p><b>Type:</b> Academic Project - Machine Learning & Astrophysics</p>
+      <p><b>Period:</b> Jan 2026</p>
+      <ul>
+        <li>Built a regression model in Python to predict the equilibrium temperature of exoplanets using stellar and orbital parameters.</li>
+        <li>Applied supervised learning techniques (Non-Linear Regression, Multiple Linear Regression) with NASA exoplanet archive data.</li>
+        <li>Motivated by personal interest in space sciences and planetary physics.</li>
+        <li>Achieved 90.7% percentage of explained variance R^2 for non_linear model </li>
+        <a href="https://acandelariaa.github.io/Proyecto_primer_parcial_IA/" target="_blank">See Documentation (Github Page)</a>
+      </ul>
+      <h4>Evidence</h4>
+      <div class="galeria-evidencia">
+        <img src="distribution_var.png" alt="Regression Models Plots">
+        <img src="eqt_pol.png" alt="Regression Models Plots">
+        <img src="eqt_non_pol.png" alt="Regression Models Plots">
+        <img src="correlation_matrix.png" alt="Regression Models Plots">
+        <img src="eqt_metrics.png" alt="Regression Models Plots">
+      </div>
+    </details>
+
+    <details>
+      <summary>Customer Churn Prediction Using AI models </summary>
+      <p><b>Type:</b> Personal Project - Machine Learning & company applications</p>
+      <p><b>Period:</b> Apr 2026</p>
+      <ul>
+        <li>Develop a full guide proyect using Telco Customer - kaggle Database for churn prediction</li>
+        <li>Full EDA documentation on IPY-notebook explaining data processing, Principal Component Analysis and more</li>
+        <li>Created multiple ML models (XGboost, Support Vector Machine, Logistic Regression + PCA) with different approaches and ideal usage cases</li>
+        <li>Reported confusion matrix, significance metrics, ROC curves and mathematical concepts applied in ML and data analysis</li>
+        <li>Published Online opensource project for free</li>
+        <a href="Customer_Churn_ML_full PDF.pdf" target="_blank"> 📄Full Documentation (PDF)</a>
+        <p>Also avaliable online on</p>
+        <a href="https://payhip.com/b/AKxdE" target="_blank"> Online Documentation (web)</a>
+      </ul>
+      <h4>Related Images</h4>
+      <div class="galeria-evidencia">
+        <img src="features_churn.png" alt="Regression Models Plots">
+        <img src="ROC_curve_cust_churn.png" alt="Regression Models Plots">
+        <img src="scatter_plot_churn.png" alt="Regression Models Plots">
+        <img src="confusion_matrix_ROC.png" alt="Regression Models Plots">
+        <img src="PCA_plot.png" alt="Regression Models Plots">
+        <img src="churn_distribution.png" alt="Regression Models Plots">
+      </div>
+    </details>
+
+    <details>
+      <summary>Tribological Testing of Theoretical Synthetic Lubricants vs Real Vegetable Oils</summary>
+      <p><b>Type:</b> Academic Project - Tribology & Materials Engineering</p>
+      <p><b>Period:</b> Apr 2025</p>
+      <ul>
+        <li>Executed tribological tests on a four-ball tester, comparing biodegradable vegetable lubricants against theorical synthetic alternatives.</li>
+        <li>Analyzed friction coefficients and wear patterns; reported findings, friction plots, and recommended optimal use cases.</li>
+        <a href="Bio_lubricant_test.pdf" target="_blank">📄 Full Documentation - See document (PDF)</a>
+      </ul>
+      <h4>Related Images</h4>
+      <div class="galeria-evidencia">
+        <video controls>
+            <source src="tribo_test.mp4" type="video/mp4">
+        </video>
+        <img src="four_ball_test.jpg" alt="Four-ball tester">
+        <img src="wear_pattern.jpg" alt="Four-ball tester">
+        <img src="microscope_wear.jpg" alt="Four-ball tester">
+        <img src="tribo_lub_wears.png" alt="Four-ball tester">
+        <img src="wear_pattern.png" alt="Four-ball tester">
+        <img src="tribo_friction_plots.png" alt="Four-ball tester">
+      </div>
+    </details>
+
+    <details>
+      <summary>Case - Hardened process to Low Carbon Steel for Fatigue Resistance Upgrade</summary>
+      <p><b>Type:</b> Academic Project - Metallurgy & Mechanical Testing</p>
+      <p><b>Period:</b> May 2025</p>
+      <ul>
+        <li>Designed fatigue samples on CAD software and manufactured based on previous design.</li>
+        <li>Created sealed environment for evening case-hardened and avoid outside contamination.</li>
+        <li>Fatigue tests on a low carbon steel specimen to evaluate the effect of surface treatment on fatigue life.</li>
+        <li>Reported maximum cyclical performance before failure, microstructure analysis and hardness analysis on Rockwell scale.</li>
+        <a href="case_hardened_steel.pdf" target="_blank">📄 Full Documentation - See document (PDF)</a>
+      </ul>
+      <h4>Evidence</h4>
+      <div class="galeria-evidencia">
+        <img src="cad_design_specimen.png" alt="CAD Design of Specimen">
+        <img src="web_failure_simulator.png" alt="Microstructure Analysis">
+        <img src="lathe_manufacturing.jpg" alt="Microstructure Analysis">
+        <img src="hardened.jpg" alt="Microstructure Analysis">
+        <img src="sealed_box.jpg" alt="sealed enviroment">
+        <img src="rockwell_hardness.jpg" alt="rockwell_hardness">
+        <video controls src="furnace.mp4" type="video/mp4"></video>
+        <video controls src="micro_structure.mp4" type="video/mp4"></video>
+        <img src="martensite.jpg" alt="structure">
+        <img src="structure1.jpg" alt="structure">
+      </div>
+    </details>
+  </details>
+
+  <details>
+    <summary style="font-size: 1.3em; color: #222;">Competitions & Extracurricular Activities</summary>
+
+    
+        <details>
+    <summary>Astro-UDEM, Astronomy Club Member</summary>
+    <p><b>Type:</b> Universidad de Monterrey (UDEM), Nuevo León, México</p>
+    <p><b>Period:</b> 2022 - Present</p>
+    <ul>
+        <li>Participated as an active member of Astro-UDEM, delivering educational talks, participating in science fairs and "science jams," and organizing club movie nights.</li>
+        <li>Co-organized and attended an astronomical camping trip at the Tlapiani Observatory in Iturbide, NL, conducting stargazing sessions to observe stars and galaxies using the observatory's professional telescope.</li>
+        <li>Collaborated with the "Laniakea" astronomy club from the Universidad Autónoma de Nuevo León (UANL) to foster inter-university scientific outreach and joint observation events.</li>
+    </ul>
+    <h4>Related Images</h4>
+    <div class="galeria-evidencia">
+        <img src="IMG_0505.jpg" alt="Astro-UDEM and Laniakea Stargazing at Tlapiani Observatory">
+        <img src="IMG_4943.jpg" alt="Astro-UDEM and Laniakea Stargazing at Tlapiani Observatory">
+        <img src="IMG_5756.JPG" alt="Astro-UDEM and Laniakea Stargazing at Tlapiani Observatory">
+        <img src="IMG_5822.jpg" alt="Astro-UDEM and Laniakea Stargazing at Tlapiani Observatory">
+        <img src="IMG_5807.JPG" alt="Astro-UDEM and Laniakea Stargazing at Tlapiani Observatory">
+        <img src="galaxy_gaze.JPG" alt="Astro-UDEM and Laniakea Stargazing at Tlapiani Observatory">
+        <img src="IMG_7564.JPG" alt="Astro-UDEM observatory">
+        <img src="IMG_7569.JPG" alt="Astro-UDEM observatory">
+        <img src="IMG_7575.JPG" alt="Astro-UDEM observatory">
+    </div>
+    </details>
+
+
+    <details>
+      <summary>Robo-sumo Competition 2nd Place</summary>
+      <p><b>Type:</b> Local Competition - UDEM</p>
+      <p><b>Period:</b> May 2024</p>
+      <ul>
+        <li>Designed, built, and programmed a fully functional robot as part of a multidisciplinary team</li>
+        <li>Secured 2nd place demonstrating skills in mechanical design, embedded systems, and teamwork under pressure</li>
+      </ul>
+      <h4>Evidence</h4>
+      <div class="galeria-evidencia">
+        <img src="robo_sumo.jpeg" alt="Robo-sumo Mechanism">
+        <img src="robo_sumo_event.jpg" alt="Robo-sumo event">
+        <img src="robo_sumo2.jpg" alt="Robo-sumo event">
+        <!-- El video ahora se ajustará automáticamente a una altura de 250px por el CSS -->
+        <video controls>
+            <source src="sumo_car.mp4" type="video/mp4">
+        </video>
+      </div>
+    </details>
+
+    <details>
+      <summary>Municipal Education Initiative</summary>
+      <p><b>Type:</b> Community Engagement - Local Government, San Pedro Garza García, Nuevo León</p>
+      <p><b>Period:</b> 2019-2020</p>
+      <ul>
+        <li>Participated in a municipal programme aimed at improving education access in local schools.</li>
+        <li>Collaborated with local authorities and educators to propose and implement educational improvements on elementary school.</li>
+      </ul>
+    </details>
+
+    
+    <details>
+      <summary>United Nations General Assembly Model</summary>
+      <p><b>Type:</b> UDEM-UN Local Simulation, Nuevo León</p>
+      <p><b>Period:</b> 2022-2023</p>
+      <ul>
+        <li>Participated as delegate in two consecutive editions (2022 & 2023), representing assigned nations in structured multilateral debate</li>
+        <li>2023 edition: proposed infrastructure development, education access expansion, and unemployment reduction strategies</li>
+        <li>2022 edition: developed and coordinated security and logistical frameworks addressing Middle East regional conflicts</li>
+      </ul>
+      <h4>Related Images</h4>
+      <div class="galeria-evidencia">
+        <img src="UN1.jpg" alt="UN Debate Session">
+        <img src="UN2.jpg" alt="UN Debate Session">
+        <img src="UN3.jpg" alt="UN Debate Session">
+        <img src="UN4.jpg" alt="UN Debate Session">
+        <img src="UN5.jpg" alt="UN Debate Session">
+        <img src="UN6.jpg" alt="UN Debate Session">
+      </div>
+    </details>
+
+  </details>
+  
+
+  <details>
+    <summary style="font-size: 1.3em; color: #222;">Work Experience</summary>
+
+    <details>
+      <summary>FRISA Aerospace - Technical Internship</summary>
+      <p><b>Location:</b> Santa Catarina - Nuevo León, México</p>
+      <p><b>Period:</b> Oct 2022 Jun 2023</p>
+      <ul>
+        <li>Recommended by High School to a technical internship on company.</li>
+        <li>Operated industrial lathes and CNC-adjacent equipment in an aerospace manufacturing environment</li>
+        <li>Used precision measurement tools: vernier, calipers, micrometers, and Mueller gauges</li>
+        <li>Read and interpreted technical engineering drawings; performed tooling changes under engineer supervision</li>
+        <a href="https://www.frisa.com/es/welcome" target="_blank"> Official Website</a>
+      </ul>
+      <h4>Related Photos</h4>
+      <div class="galeria-evidencia">
+        <img src="IMG_FRISA.jpg" alt="Research Academic Evidence">
+        <img src="IMG_FRISA1.jpg" alt="Research Academic Evidence">
+        <img src="IMG_FRISA2.jpg" alt="Research Academic Evidence">
+      </div>
+    </details>
+
+    <details>
+      <summary>Academic Peer Tutor - Mathematics & Engineering Sciences</summary>
+      <p><b>Institution:</b> Universidad de Monterrey (UDEM) - San Pedro Garza Garcia, Nuevo León, Mexico</p>
+      <p><b>Period:</b> 2025-Present</p>
+      <ul>
+        <li>Selected by the university to provide academic tutoring to fellow students in advanced mathematics and engineering subjects, including Differential Equations, Integral Calculus, Linear Algebra, Statics and related disciplines.</li>
+        <li>Provided math tutoring to other students from a solid comprehension of core engineering topics.</li>
+        <li>Recognized by the institution through a formal compensation scheme for consistent tutoring performance over 2+ semesters.</li>
+        <li>Ranked top 3 peer tutors in the program due to effective teaching and solid subject domain.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Grafik Spot (Local printing Shop) - General Employee</summary>
+      <p><b>Period:</b> Oct 2022-Jun 2023</p>
+      <ul>
+        <li>Big scale canvas and vinyl printing for panoramic and local advertisement</li>
+        <li>Precise cutting of presentation cards</li>
+        <li>Laminated documents and tabloids</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Cinepolis (VIP Movie theater) - Waiter</summary>
+      <p><b>Period:</b> Jul 2025</p>
+      <ul>
+        <li>Food runner, waiter, and customer service</li>
+        <li>Cook</li>
+        <li>General Intendancy</li>
+      </ul>
+    </details>
+  </details>
+
+  <details>
+    <summary style="font-size: 1.3em; color: #222;">Technical Skills</summary>
+    
+    <details>
+      <summary>CAD / Design</summary>
+      <p>Siemens NX, SolidWorks, Autodesk Inventor, Fusion 360, HyperMesh (optistruct)</p>
+    </details>
+
+    <details>
+      <summary>Programming & Data Analysis</summary>
+      <p>Python, Google Colab, VS Code</p>
+      <p>Machine Learning Models, data visualization and interpretation</p>
+    </details>
+
+    <details>
+      <summary>Manufacturing</summary>
+      <p>Industrial lathes, precision measurement (vernier, micrometer), layout reading, material testing</p>
+    </details>
+
+    <details>
+      <summary>Office / Docs</summary>
+      <p>Microsoft 365: Word (advanced), PowerPoint (intermediate), Excel (basic)</p>
+    </details>
+
+    <details>
+      <summary>Languages</summary>
+      <p>Spanish (Native) | English (C1 Advanced CEFR)</p>
+    </details>
+  </details>
+
+  <details>
+    <summary style="font-size: 1.3em; color: #222;">Achievements & Scholarships</summary>
+    <ul>
+      <li>100% merit scholarship Universidad de Monterrey (UDEM), 2023-present</li>
+      <li>100% merit scholarship - Preparatoria Politécnica Santa Catarina Fama, 2020-2023</li>
+      <li>Secondary school merit scholarship awarded for academic excellence</li>
+      <li>Valedictorian highest GPA of technical speciality cohort, 2023</li>
+      <li>Global Nominee Team - NASA Space Apps Challenge 2025</li>
+    </ul>
+  </details>
+
+
+  <details>
+        <summary style="font-size: 1.3em; color: #222;">Letters of Recommendation</summary>
+        
+        <div class="recomendacion-bloque">
+            <div class="cita-extracto">
+            "I am confident that his technical foundation, curiosity, and commitment to his professional
+                development make him a strong candidate for a program of this nature. CERN’s engineering
+                environment would both challenge and bring out the best in him."
+            </div>
+            <div class="autor-recomendacion"> Dr. Yaneth Bedolla Gil </div>
+            <div class="puesto-autor"> Mechanical Engineering Program Director, UDEM</div>
+            <a href="653728 Juan Angel Candelaria Rodríguez Carta de Recomendacion - firmado.pdf" target="_blank" class="btn-descarga">📄 View Full Recommendation Letter (PDF)</a>
+        </div>
+        
+        
+        <div class="recomendacion-bloque">
+            <div class="cita-extracto">
+            "As an educator and engineering professional, I am confident that Mr. Ángel possesses the technical foundation, intellectual curiosity, and professional maturity required to excel in an organization of CERN's caliber."
+            </div>
+            <div class="autor-recomendacion">Jesús Alberto Tamez García, ChEng. MSc. MBA. </div>
+            <div class="puesto-autor">Associate Professor and Consultant, UDEM</div>
+            <a href="RecommendationLetter_UDEM_04062026_JACR.pdf" target="_blank" class="btn-descarga">📄 View Full Recommendation Letter (PDF)</a>
+        </div>
+
+        <div class="recomendacion-bloque">
+            <div class="cita-extracto">
+            "His technical profile is broad and impressive for a student at his stage. Beyond traditional mechanical engineering, he has shown a strong aptitude for data-driven research... He is a driven, collaborative, and intellectually curious individual."
+            </div>
+            <div class="autor-recomendacion">Dr. Laura Peña Parás</div>
+            <div class="puesto-autor">Full Professor, Department of Mechanical Engineering and Electronics, UDEM</div>
+            <a href="Juan_Angel_Candelaria.pdf" target="_blank" class="btn-descarga">📄 View Full Recommendation Letter (PDF)</a>
+        </div>
+
+                <div class="recomendacion-bloque">
+            <div class="cita-extracto">
+            "Throughout the project, Ángel consistently demonstrated strong analytical skills, technical rigor, attention to detail, and a genuine passion for applied mechanical engineering research. I am confident that he possesses the discipline and engineering mindset necessary to contribute meaningfully to CERN's multidisciplinary teams."
+            </div>
+            <div class="autor-recomendacion">Demófilo Maldonado Cortés</div>
+            <div class="puesto-autor">Titular Proffesor, Mechanical and Electric Engineering Department, UDEM</div>
+            <a href="ANGEL_CANDELARIA_(1).pdf" target="_blank" class="btn-descarga">📄 View Full Recommendation Letter (PDF)</a>
+        </div>
+
+
+        <div class="recomendacion-bloque">
+            <div class="cita-extracto">
+            "Ángel is respectful, reliable, and eager to learn. He works well with peers, accepts feedback constructively, and approaches new challenges with a positive attitude. These qualities, combined with his academic preparation and motivation, make him a strong candidate for a program such as the CERN Technical Studentship."
+            </div>
+            <div class="autor-recomendacion"> Ayax Santos Guevara. </div>
+            <div class="puesto-autor">Physics Professor, Department of Physics and Mathematics Universidad de Monterrey UDEM</div>
+            <a href="CERN_Recommendation_Letter_Angel_Candelaria.pdf" target="_blank" class="btn-descarga">📄 View Full Recommendation Letter (PDF)</a>
+        </div>
+
+        <div class="recomendacion-bloque">
+            <div class="cita-extracto">
+            "I believe Ángel possesses the maturity, work ethic, and motivation
+necessary to benefit from an international research environment such as CERN. I am confident that this
+opportunity would contribute significantly to his professional development and that he would approach it
+with dedication and responsibility."
+            </div>
+            <div class="autor-recomendacion"> Humberto Martinez Huerta. </div>
+            <div class="puesto-autor">Department of Physics and Mathematics Universidad de Monterrey UDEM</div>
+            <a href="Carta Recomendación - CERN - Angel.pdf" target="_blank" class="btn-descarga">📄 View Full Recommendation Letter (PDF)</a>
+        </div>
+
+    </details>
+
+    <details>
+        <summary style="font-size: 1.3em; color: #222;">Certifications & Diplomas</summary>
+        
+        <ul>
+            <li><b>Machine Learning Specialization</b> - Stanford University / DeepLearning.AI (Coursera, 2026). <br> <i>Covering Supervised Learning, Advanced Learning Algorithms, Unsupervised Learning, Recommenders, and Reinforcement Learning.</i></li>
+            
+            <li><b>Research & AI Product Development (Semilleros de Investigación)</b> - Universidad de Monterrey (2025-2026). <br> <i>Recognition for active participation, critical analysis, and contribution to Artificial Intelligence research.</i></li>
+            
+            <li><b>SolidWorks Basic Course</b> - Intelligy Authorized Training Center (2022).</li>
+            
+            <li><b>EF SET English Certificate (C1 Advanced)</b> - EF Standard English Test (2024). <br> <i>Score: 64/100 (Proficient C2 in Listening, C1 in Writing).</i></li>
+            
+            <li><b>Distinguished High School Graduate (Valedictorian)</b> - Preparatoria Politécnica Santa Catarina (2023). <br> <i>Awarded for achieving the highest GPA in the Industrial Machinery and Tools specialty.</i></li>
+            
+            <li><b>UDEMUN 2022 Delegate</b> - United Nations Simulation, UDEM (2022).</li>
+        </ul>
+
+        <h4>Visual Credentials</h4>
+        <p><i>Click to expand .</i></p>
+        
+        <div class="galeria-certificados">
+            <img src="Coursera 8OZUFBAPIP3A.jpeg" alt="Stanford Machine Learning Specialization">
+            <img src="Diploma SEMILLEROS DE INVESTIGACIÓN Juan Ángel.jpeg" alt="Diploma Semilleros de Investigación AI">
+            <img src="Solidworks certificate (1).jpeg" alt="SolidWorks Certificate Intelligy">
+            <img src="EF SET Certificate (2).jpeg" alt="EF SET English Certificate C1">
+            <img src="Bachiller distinguido (1).jpeg" alt="Bachiller Distinguido Valedictorian">
+            <img src="UDEMUN - Juan Angel Candelaria (1).jpeg" alt="UDEMUN Delegate">
+        </div>
+    </details>
+
+
+    <details>
+    <summary style="font-size: 1.3em; color: #222;">Scientific Interests & Hobbies</summary>
+    
+    <details>
+      <summary>Scientific Interests</summary>
+      <p>Physics, Rocket propulsion & space exploration, Astrophysics & exoplanetary, science, Advanced materials & metallurgy, Machine learning applied to scientific data, Manufacturing Processes, Mechanical Design, Electronics</p>
+    </details>
+
+    <details>
+      <summary>Hobbies</summary>
+      <p>Fencing, Drawing, Oil painting, Cooking, Fantasy books, Running, Gym, Variety of music, Mountain Hikes</p>
+      <div class="galeria-evidencia">
+        <video controls>
+            <source src="IMG_5070.mp4" type="video/mp4">
+        </video>
+        <video controls>
+            <source src="IMG_0031 (1).mp4" type="video/mp4">
+        </video>
+        <img src="IMG_0083.jpg" alt="Hobbies">
+        <img src="IMG_3918.jpg" alt="Hobbies">
+        <img src="running1.JPG" alt="Hobbies">
+        <img src="running2.JPG" alt="Hobbies">
+        <img src="hike.jpg" alt="Hobbies">
+        <img src="hike1.jpg" alt="Hobbies">
+        <img src="hike2.jpg" alt="Hobbies">
+        <video controls>
+            <source src="running3.mp4" type="video/mp4">
+        </video>
+      </div>
+    </details>
+  </details>
+
+  <!-- Modal para expandir imágenes -->
+  <div id="visor-imagenes" class="modal-visor" onclick="cerrarVisor()">
+    <img id="imagen-ampliada" src="">
+    <span class="cerrar-visor">&times;</span>
+  </div>
+
+  <!-- Script para que las imágenes se expandan -->
+  <script>
+    // Agarramos el visor y la imagen de adentro
+    const visor = document.getElementById('visor-imagenes');
+    const imagenAmpliada = document.getElementById('imagen-ampliada');
+
+    // Seleccionamos TODAS las imágenes de los certificados y evidencias
+    const todasLasImagenes = document.querySelectorAll('.galeria-certificados img, .galeria-evidencia img');
+
+    // Le agregamos a cada imagen la orden de abrirse
+    todasLasImagenes.forEach(img => {
+      // Hacemos que parezca que se puede hacer clic (por si nos faltó en el CSS)
+      img.style.cursor = 'zoom-in'; 
+      
+      img.addEventListener('click', function() {
+        imagenAmpliada.src = this.src; // Copia la ruta de la imagen seleccionada
+        visor.classList.add('activo'); // Prende el visor
+      });
+    });
+
+    // Función para apagar el visor al dar clic en el fondo oscuro
+    function cerrarVisor() {
+      visor.classList.remove('activo');
+    }
+  </script>
+
+</body>
+</html>
